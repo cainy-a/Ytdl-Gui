@@ -13,7 +13,10 @@ namespace Ytdl_Gui
 			InitializeComponent();
 			
 			if (!VistaSecurity.IsAdmin())
+			{
 				VistaSecurity.AddShieldToButton(buttonDownload); // Add a shield to Download Button
+				buttonDownload.Text = "Get admin (REQUIRED)";
+			}
 		}
 
 		public static string SavePath;
@@ -23,6 +26,9 @@ namespace Ytdl_Gui
 		{
 			SavePath = System.IO.Directory.GetCurrentDirectory(); // Default Save Path to current directory
 			textBoxPath.Text = SavePath; // Update Display
+			
+			if (!VistaSecurity.IsAdmin())
+				VistaSecurity.RestartElevated(); // Restart as admin if needed
 		}
 
 		private void linkLabelYTDL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -66,23 +72,27 @@ namespace Ytdl_Gui
 
 		private void buttonDownload_Click(object sender, EventArgs e)
 		{
-			buttonDownload.Text = "Downloading... Please wait";
-			
 			System.IO.Directory.SetCurrentDirectory(SavePath);
 			List<string> tempUrls = new List<string>();
 			if (VistaSecurity.IsAdmin())
 			{
+				buttonDownload.Text = "Downloading... Please wait";
+
 				foreach (var VARIABLE in listBoxSelected.Items)
 				{
 					tempUrls.Add(VARIABLE.ToString());
 				} // Hacky code to try and work around the WinForms collection
-				
+
 				DownloadUrls(tempUrls);
+				
+				buttonDownload.Text = "Done!";
 			}
 			else
+			{
+				buttonDownload.Text = "Getting admin";
 				VistaSecurity.RestartElevated(); // Restart as admin if needed
-
-			buttonDownload.Text = "Done!";
+				buttonDownload.Text = "Get admin (REQUIRED)";
+			}
 		}
 
 		private void textBoxPath_TextChanged(object sender, EventArgs e)

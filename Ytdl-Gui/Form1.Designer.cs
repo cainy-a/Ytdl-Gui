@@ -40,7 +40,7 @@
 			this.buttonClear = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.label4 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textBoxPath = new System.Windows.Forms.TextBox();
 			this.buttonBrowse = new System.Windows.Forms.Button();
 			this.buttonDownload = new System.Windows.Forms.Button();
 			this.linkLabelSites = new System.Windows.Forms.LinkLabel();
@@ -63,12 +63,13 @@
 			this.linkLabelCain.TabIndex = 1;
 			this.linkLabelCain.TabStop = true;
 			this.linkLabelCain.Text = "GUI by Cain Atkinson";
+			this.linkLabelCain.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelCain_LinkClicked);
 			// 
 			// linkLabelYTDL
 			// 
 			this.linkLabelYTDL.Location = new System.Drawing.Point(264, 9);
 			this.linkLabelYTDL.Name = "linkLabelYTDL";
-			this.linkLabelYTDL.Size = new System.Drawing.Size(180, 23);
+			this.linkLabelYTDL.Size = new System.Drawing.Size(180, 19);
 			this.linkLabelYTDL.TabIndex = 2;
 			this.linkLabelYTDL.TabStop = true;
 			this.linkLabelYTDL.Text = "Powered by the Youtube-DL Project\r\n";
@@ -133,12 +134,13 @@
 			this.label4.TabIndex = 9;
 			this.label4.Text = "Choose Save Directory";
 			// 
-			// textBox1
+			// textBoxPath
 			// 
-			this.textBox1.Location = new System.Drawing.Point(12, 320);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(451, 20);
-			this.textBox1.TabIndex = 10;
+			this.textBoxPath.Location = new System.Drawing.Point(12, 320);
+			this.textBoxPath.Name = "textBoxPath";
+			this.textBoxPath.Size = new System.Drawing.Size(451, 20);
+			this.textBoxPath.TabIndex = 10;
+			this.textBoxPath.TextChanged += new System.EventHandler(this.textBoxPath_TextChanged);
 			// 
 			// buttonBrowse
 			// 
@@ -180,7 +182,7 @@
 			this.Controls.Add(this.linkLabelSites);
 			this.Controls.Add(this.buttonDownload);
 			this.Controls.Add(this.buttonBrowse);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textBoxPath);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.buttonClear);
 			this.Controls.Add(this.buttonAdd);
@@ -211,8 +213,8 @@
 		private System.Windows.Forms.LinkLabel linkLabelSites;
 		private System.Windows.Forms.LinkLabel linkLabelYTDL;
 		private System.Windows.Forms.ListBox listBoxSelected;
-		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.TextBox textBoxAdd;
+		private System.Windows.Forms.TextBox textBoxPath;
 
 		#endregion
 	}

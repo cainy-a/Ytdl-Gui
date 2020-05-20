@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ytdl-Gui", "Ytdl-Gui\Ytdl-Gui.csproj", "{2F4A4648-97C2-4D90-9A9D-2EE8F5FD3C62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F4A4648-97C2-4D90-9A9D-2EE8F5FD3C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F4A4648-97C2-4D90-9A9D-2EE8F5FD3C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F4A4648-97C2-4D90-9A9D-2EE8F5FD3C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F4A4648-97C2-4D90-9A9D-2EE8F5FD3C62}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

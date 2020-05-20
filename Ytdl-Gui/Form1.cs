@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Ytdl_Gui.Download;
 
 namespace Ytdl_Gui
 {
@@ -16,10 +11,13 @@ namespace Ytdl_Gui
 		public Form1()
 		{
 			InitializeComponent();
+			
+			if (!VistaSecurity.IsAdmin())
+				VistaSecurity.AddShieldToButton(buttonDownload); // Add a shield to Download Button
 		}
 
 		public static string SavePath;
-		public static IList<string> Urls = new List<string>();
+		public static List<string> Urls = new List<string>();
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
@@ -55,7 +53,7 @@ namespace Ytdl_Gui
 		{
 			Urls.Add(textBoxAdd.Text); // Add to local list
 			listBoxSelected.Items.Clear(); // Clear Displayed list
-			listBoxSelected.Items.AddRange((object[]) Urls); // Add local list into empty displayed list. This approach makes sure that they are always in sync.
+			listBoxSelected.Items.AddRange(Urls.ToArray()); // Add local list into empty displayed list. This approach makes sure that they are always in sync.
 		}
 
 		private void buttonBrowse_Click(object sender, EventArgs e)
@@ -68,7 +66,23 @@ namespace Ytdl_Gui
 
 		private void buttonDownload_Click(object sender, EventArgs e)
 		{
-			throw new System.NotImplementedException();
+			buttonDownload.Text = "Downloading... Please wait";
+			
+			System.IO.Directory.SetCurrentDirectory(SavePath);
+			List<string> tempUrls = new List<string>();
+			if (VistaSecurity.IsAdmin())
+			{
+				foreach (var VARIABLE in listBoxSelected.Items)
+				{
+					tempUrls.Add(VARIABLE.ToString());
+				} // Hacky code to try and work around the WinForms collection
+				
+				DownloadUrls(tempUrls);
+			}
+			else
+				VistaSecurity.RestartElevated(); // Restart as admin if needed
+
+			buttonDownload.Text = "Done!";
 		}
 
 		private void textBoxPath_TextChanged(object sender, EventArgs e)

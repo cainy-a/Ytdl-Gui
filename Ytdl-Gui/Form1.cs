@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Ytdl_Gui.Download;
@@ -13,21 +15,19 @@ namespace Ytdl_Gui
 		{
 			InitializeComponent();
 
-			if (!VistaSecurity.IsAdmin())
-			{
-				VistaSecurity.AddShieldToButton(buttonDownload); // Add a shield to Download Button
-				buttonDownload.Text = "Get admin (REQUIRED)";
-			}
+			if (VistaSecurity.IsAdmin()) return;
+			VistaSecurity.AddShieldToButton(buttonDownload); // Add a shield to Download Button
+			buttonDownload.Text = "Get admin (REQUIRED)";
 		}
 
-		public static string SavePath;
-		public static List<string> Urls = new List<string>();
-		public static bool Busy = false;
+		private static string _savePath;
+		private static List<string> _urls = new List<string>();
+		private static bool _busy;
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-			SavePath = System.IO.Directory.GetCurrentDirectory(); // Default Save Path to current directory
-			textBoxPath.Text = SavePath; // Update Display
+			_savePath = Directory.GetCurrentDirectory(); // Default Save Path to current directory
+			textBoxPath.Text = _savePath; // Update Display
 
 			if (!VistaSecurity.IsAdmin())
 				VistaSecurity.RestartElevated(); // Restart as admin if needed
@@ -48,7 +48,7 @@ namespace Ytdl_Gui
 		private void buttonClear_Click(object sender, EventArgs e)
 		{
 			listBoxSelected.Items.Clear();
-			Urls.Clear();
+			_urls.Clear();
 		}
 
 		private void linkLabelSites_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -59,25 +59,25 @@ namespace Ytdl_Gui
 
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
-			Urls.Add(textBoxAdd.Text); // Add to local list
+			_urls.Add(textBoxAdd.Text); // Add to local list
 			listBoxSelected.Items.Clear(); // Clear Displayed list
 			listBoxSelected.Items
-				.AddRange(Urls
+				.AddRange(_urls
 					.ToArray()); // Add local list into empty displayed list. This approach makes sure that they are always in sync.
 		}
 
 		private void buttonBrowse_Click(object sender, EventArgs e)
 		{
-			if (Busy) return;
-			folderBrowserDialog1.SelectedPath = SavePath; // Make Folder Browser use current path as Root
+			if (_busy) return;
+			folderBrowserDialog1.SelectedPath = _savePath; // Make Folder Browser use current path as Root
 			folderBrowserDialog1.ShowDialog(); // Show the Dialog
-			SavePath = folderBrowserDialog1.SelectedPath; // Save the Folder Path
-			textBoxPath.Text = SavePath; // Update Display
+			_savePath = folderBrowserDialog1.SelectedPath; // Save the Folder Path
+			textBoxPath.Text = _savePath; // Update Display
 		}
 
 		private async void buttonDownload_Click(object sender, EventArgs e)
 		{
-			if (Busy)
+			if (_busy)
 			{
 				buttonDownload.Text = "I'm busy, Please Wait.";
 				MessageBox.Show("I'm busy!",
@@ -87,23 +87,20 @@ namespace Ytdl_Gui
 				return;
 			}
 
-			System.IO.Directory.SetCurrentDirectory(SavePath);
-			List<string> tempUrls = new List<string>();
+			Directory.SetCurrentDirectory(_savePath);
+			var tempUrls = new List<string>();
 			if (VistaSecurity.IsAdmin())
 			{
-				Busy = true;
+				_busy = true;
 				buttonDownload.Text = "Downloading... Please wait";
 
-				foreach (var VARIABLE in listBoxSelected.Items)
-				{
-					tempUrls.Add(VARIABLE.ToString());
-				} // Hacky code to try and work around the WinForms collection
+				tempUrls.AddRange(from object variable in listBoxSelected.Items select variable.ToString());
 
 				// DownloadUrls(tempUrls); // old way, runs it synchronously
 				await Task.Factory.StartNew(() => DownloadUrls(tempUrls)); // New way, should run async.
 
 				buttonDownload.Text = "Done!";
-				Busy = false;
+				_busy = false;
 			}
 			else
 			{
@@ -115,8 +112,8 @@ namespace Ytdl_Gui
 
 		private void textBoxPath_TextChanged(object sender, EventArgs e)
 		{
-			if (Busy) return;
-			SavePath = textBoxPath.Text;
+			if (_busy) return;
+			_savePath = textBoxPath.Text;
 		}
 	}
 }

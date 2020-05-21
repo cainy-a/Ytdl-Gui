@@ -19,8 +19,8 @@ namespace Ytdl_Gui
 		
 		static internal bool IsAdmin()
 		{
-			WindowsIdentity id = WindowsIdentity.GetCurrent();
-			WindowsPrincipal p = new WindowsPrincipal(id);
+			var id = WindowsIdentity.GetCurrent();
+			var p = new WindowsPrincipal(id);
 			return p.IsInRole(WindowsBuiltInRole.Administrator);
 		} // Checks for Admin
 
@@ -32,14 +32,14 @@ namespace Ytdl_Gui
 		
 		internal static void RestartElevated()
 		{
-			ProcessStartInfo startInfo = new ProcessStartInfo();
+			var startInfo = new ProcessStartInfo();
 			startInfo.UseShellExecute = true;
 			startInfo.WorkingDirectory = Environment.CurrentDirectory;
 			startInfo.FileName = Application.ExecutablePath;
 			startInfo.Verb = "runas";
 			try
 			{
-				Process p = Process.Start(startInfo);
+				var p = Process.Start(startInfo);
 			}
 			catch(System.ComponentModel.Win32Exception)
 			{

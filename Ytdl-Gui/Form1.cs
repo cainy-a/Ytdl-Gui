@@ -80,8 +80,8 @@ namespace Ytdl_Gui
 			if (_busy)
 			{
 				buttonDownload.Text = "I'm busy, Please Wait.";
-				MessageBox.Show("I'm busy!",
-					"I'm busy right now, please wait until the button changes to say \"done\".",
+				MessageBox.Show("I'm busy right now, please wait until the button changes to say \"done\".",
+					"I'm busy!",
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Warning);
 				return;

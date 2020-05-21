@@ -68,6 +68,7 @@ namespace Ytdl_Gui
 
 		private void buttonBrowse_Click(object sender, EventArgs e)
 		{
+			if (Busy) return;
 			folderBrowserDialog1.SelectedPath = SavePath; // Make Folder Browser use current path as Root
 			folderBrowserDialog1.ShowDialog(); // Show the Dialog
 			SavePath = folderBrowserDialog1.SelectedPath; // Save the Folder Path
@@ -113,6 +114,9 @@ namespace Ytdl_Gui
 		}
 
 		private void textBoxPath_TextChanged(object sender, EventArgs e)
-			=> SavePath = textBoxPath.Text;
+		{
+			if (Busy) return;
+			SavePath = textBoxPath.Text;
+		}
 	}
 }

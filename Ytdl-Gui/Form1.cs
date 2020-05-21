@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Ytdl_Gui.Download;
 
@@ -11,7 +12,7 @@ namespace Ytdl_Gui
 		public Form1()
 		{
 			InitializeComponent();
-			
+
 			if (!VistaSecurity.IsAdmin())
 			{
 				VistaSecurity.AddShieldToButton(buttonDownload); // Add a shield to Download Button
@@ -21,12 +22,13 @@ namespace Ytdl_Gui
 
 		public static string SavePath;
 		public static List<string> Urls = new List<string>();
+		public static bool Busy = false;
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			SavePath = System.IO.Directory.GetCurrentDirectory(); // Default Save Path to current directory
 			textBoxPath.Text = SavePath; // Update Display
-			
+
 			if (!VistaSecurity.IsAdmin())
 				VistaSecurity.RestartElevated(); // Restart as admin if needed
 		}
@@ -59,7 +61,9 @@ namespace Ytdl_Gui
 		{
 			Urls.Add(textBoxAdd.Text); // Add to local list
 			listBoxSelected.Items.Clear(); // Clear Displayed list
-			listBoxSelected.Items.AddRange(Urls.ToArray()); // Add local list into empty displayed list. This approach makes sure that they are always in sync.
+			listBoxSelected.Items
+				.AddRange(Urls
+					.ToArray()); // Add local list into empty displayed list. This approach makes sure that they are always in sync.
 		}
 
 		private void buttonBrowse_Click(object sender, EventArgs e)
@@ -70,12 +74,23 @@ namespace Ytdl_Gui
 			textBoxPath.Text = SavePath; // Update Display
 		}
 
-		private void buttonDownload_Click(object sender, EventArgs e)
+		private async void buttonDownload_Click(object sender, EventArgs e)
 		{
+			if (Busy)
+			{
+				buttonDownload.Text = "I'm busy, Please Wait.";
+				MessageBox.Show("I'm busy!",
+					"I'm busy right now, please wait until the button changes to say \"done\".",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Warning);
+				return;
+			}
+
 			System.IO.Directory.SetCurrentDirectory(SavePath);
 			List<string> tempUrls = new List<string>();
 			if (VistaSecurity.IsAdmin())
 			{
+				Busy = true;
 				buttonDownload.Text = "Downloading... Please wait";
 
 				foreach (var VARIABLE in listBoxSelected.Items)
@@ -83,9 +98,11 @@ namespace Ytdl_Gui
 					tempUrls.Add(VARIABLE.ToString());
 				} // Hacky code to try and work around the WinForms collection
 
-				DownloadUrls(tempUrls);
-				
+				// DownloadUrls(tempUrls); // old way, runs it synchronously
+				await Task.Factory.StartNew(() => DownloadUrls(tempUrls)); // New way, should run async.
+
 				buttonDownload.Text = "Done!";
+				Busy = false;
 			}
 			else
 			{

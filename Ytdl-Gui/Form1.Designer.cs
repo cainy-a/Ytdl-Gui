@@ -144,9 +144,9 @@
 			// 
 			// buttonBrowse
 			// 
-			this.buttonBrowse.Location = new System.Drawing.Point(469, 318);
+			this.buttonBrowse.Location = new System.Drawing.Point(469, 320);
 			this.buttonBrowse.Name = "buttonBrowse";
-			this.buttonBrowse.Size = new System.Drawing.Size(75, 23);
+			this.buttonBrowse.Size = new System.Drawing.Size(75, 20);
 			this.buttonBrowse.TabIndex = 11;
 			this.buttonBrowse.Text = "Browse";
 			this.buttonBrowse.UseVisualStyleBackColor = true;
@@ -195,6 +195,7 @@
 			this.Controls.Add(this.label1);
 			this.Location = new System.Drawing.Point(15, 15);
 			this.Name = "Form1";
+			this.Text = "Youtube Downloader GUI";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

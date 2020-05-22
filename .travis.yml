@@ -1,0 +1,7 @@
+language: csharp
+
+install:
+- dotnet restore
+
+script:
+ - dotnet build Ytdl-Gui\Ytdl-Gui.csproj

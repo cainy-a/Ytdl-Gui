@@ -1,7 +1,2 @@
 language: csharp
-
-install:
-- nuget restore
-
-script:
- - mono build Ytdl-Gui\Ytdl-Gui.csproj
+solution: Ytdl-Gui.sln

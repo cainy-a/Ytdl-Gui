@@ -97,7 +97,7 @@ namespace Ytdl_Gui
 				tempUrls.AddRange(from object variable in listBoxSelected.Items select variable.ToString());
 
 				// DownloadUrls(tempUrls); // old way, runs it synchronously
-				await Task.Factory.StartNew(() => DownloadUrls(tempUrls)); // New way, should run async.
+				await Task.Factory.StartNew(() => DownloadUrls(tempUrls, checkBoxExtract.Checked, checkBoxRedownload.Checked));
 
 				buttonDownload.Text = "Done!";
 				_busy = false;
